@@ -38,6 +38,7 @@ model Artwork {
   exhibitionId Int?
   exhibition   Exhibition? @relation(fields: [exhibitionId], references: [id], onDelete: SetNull)
   createdAt    DateTime    @default(now())
+  status ArtworkStatus @default(AVAILABLE)
 }
 
 enum ArtworkStatus {
@@ -45,9 +46,4 @@ enum ArtworkStatus {
   SOLD
   RESERVED
   ON_DISPLAY
-}
-
-model Artwork {
-  // ... existing fields
-  status ArtworkStatus @default(AVAILABLE)
 }
