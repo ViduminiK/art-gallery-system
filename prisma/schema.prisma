@@ -1,0 +1,53 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Artist {
+  id        Int       @id @default(autoincrement())
+  name      String
+  bio       String?
+  email     String    @unique
+  artworks  Artwork[]
+  createdAt DateTime  @default(now())
+}
+
+model Exhibition {
+  id          Int       @id @default(autoincrement())
+  title       String
+  location    String?
+  startDate   DateTime
+  endDate     DateTime
+  description String?
+  createdAt   DateTime  @default(now())
+  artworks    Artwork[]
+}
+
+model Artwork {
+  id           Int         @id @default(autoincrement())
+  title        String
+  description  String?
+  price        Float
+  imageUrl     String?
+  artistId     Int
+  artist       Artist      @relation(fields: [artistId], references: [id], onDelete: Cascade)
+  exhibitionId Int?
+  exhibition   Exhibition? @relation(fields: [exhibitionId], references: [id], onDelete: SetNull)
+  createdAt    DateTime    @default(now())
+}
+
+enum ArtworkStatus {
+  AVAILABLE
+  SOLD
+  RESERVED
+  ON_DISPLAY
+}
+
+model Artwork {
+  // ... existing fields
+  status ArtworkStatus @default(AVAILABLE)
+}
